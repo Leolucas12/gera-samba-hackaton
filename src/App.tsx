@@ -2,18 +2,29 @@ import { useEffect, useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
-import { getTemplates } from './services'
+import { createTemplate, createTemplateProps, getTemplates } from './services'
 
 function App() {
   const [count, setCount] = useState(0)
 
-  useEffect(() => {
-    const subscriber = async () => {
-      const result = await getTemplates();
-      console.log(result)  
+  const _getTemplates = async () => {
+    const response = await getTemplates();
+    console.log(response)
+  }
+
+  const _createTemplates = async (content: string, name: string) => {
+    const input: createTemplateProps = {
+      content: content,
+      variables: {
+        "name": name
+      }
     }
-    
-    subscriber()
+    const response = await createTemplate(input);
+    console.log(response)
+  }
+
+  useEffect(() => {
+    _getTemplates()
   }, [])
 
   return (
