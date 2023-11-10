@@ -22,7 +22,7 @@ export default function Register() {
                                 <div className="form-group-item">
                                     <label htmlFor="">Qual o nicho da sua Empresa</label>
                                     <select name="" id="">
-                                        <option value="" disabled>Selecione a área de atuação</option>
+                                        <option value="" disabled selected>Selecione a área de atuação</option>
                                     </select>
                                 </div>
                             </div>
@@ -34,7 +34,7 @@ export default function Register() {
                                 <div className="form-group-item">
                                     <label htmlFor="">Tipo do Contexto</label>
                                     <select name="" id="">
-                                        <option value="" disabled>Selecione o tipo do bot</option>
+                                        <option value="" disabled selected>Selecione o tipo do bot</option>
                                     </select>
                                 </div>
                             </div>
