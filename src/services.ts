@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { createSession, setSessionKey } from './LocalStorage';
 
 const { VITE_BASE_API } = import.meta.env;
 
@@ -42,7 +43,7 @@ export const createTemplate = (props: CreateTemplateProps): Promise<CreateTempla
             },
         })
         .then((response) => {
-            
+            setSessionKey("template_id", response.data.id);
             return response.data
         })
         .catch((error) => {
@@ -60,7 +61,11 @@ export const createConversation = (props: CreateConversationProps): Promise<stri
                 'Content-Type': 'application/json',
             },
         })
-        .then((response) => response.data)
+        .then((response) => {
+            setSessionKey("conversation_id", response.data.id);
+
+            return response.data
+        })
         .catch((error) => {
             console.error('Create template error: ', error);
             throw error;

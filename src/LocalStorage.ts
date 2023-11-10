@@ -20,3 +20,13 @@ export const parseSession = (props: LocalStorageTemplate) => {
       return `Você é um Bot que atua no canal de whatsapp trabalhando para loja ${data.name}.\n ${data.name} é uma loja de ${data.niche} \nO cliente que você está atendendo se chama {nome}, comece o ${data.typeContext}, ${data.details}`
    }
 }
+
+
+export const setSessionKey = (key: string, value: string) => {
+   localStorage.setItem(key, value);
+}
+
+
+export const getSessionKey = (key: string) => {
+   localStorage.getItem(key);
+}
