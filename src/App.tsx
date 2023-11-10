@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
-import { createTemplate, createTemplateProps, getTemplates } from './services'
+import { createTemplate, CreateTemplateProps, getTemplates } from './services'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -13,7 +13,7 @@ function App() {
   }
 
   const _createTemplates = async (content: string, name: string) => {
-    const input: createTemplateProps = {
+    const input: CreateTemplateProps = {
       content: content,
       variables: {
         "name": name
@@ -24,7 +24,8 @@ function App() {
   }
 
   useEffect(() => {
-    _getTemplates()
+    // _getTemplates();
+    // _createTemplates("Bora bill!", "Teste");
   }, [])
 
   return (
