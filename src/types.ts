@@ -13,3 +13,11 @@ export interface Conversation {
 export interface Interaction {
   message: string;
 }
+
+export interface LocalStorageTemplate {
+  name: string;
+  niche: string;
+  typeContext: string;
+  templateId: string;
+  details: string;
+}
