@@ -1,10 +1,8 @@
-import  'bootstrap/dist/css/bootstrap.min.css' ;
-import './App.css'
-import Register from './pages/register/register' ;
 
-import { useEffect, useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import './App.css'
+import  'bootstrap/dist/css/bootstrap.min.css' ;
+import Register from './pages/register/register' ;
+import { useEffect} from 'react'
 import { getTemplates } from './services'
 
 function App() {

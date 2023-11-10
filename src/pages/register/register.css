@@ -1,0 +1,101 @@
+.content-register {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+}
+
+.content-register header {
+    padding: 15px;
+}
+.content-register h1 {
+    color: #000;
+    text-align: center;
+    font-size: 30.204px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    text-transform: uppercase;
+}
+
+.content-register h2 {
+    color: #A7A7A7;
+    text-align: center;
+    font-family: Inter;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    text-transform: uppercase;
+}
+
+.content-register form {
+    width: 100%;
+    margin-top: 60px;
+    display: flex;
+    flex-direction: column;
+}
+
+form .form-group {
+    display: flex;
+}
+
+.form-group label {
+    margin-bottom: 8px;
+    color: #000;
+    font-family: Inter;
+    font-size: 12pt;
+}
+
+form .form-group-item {
+    width: 50%;
+    margin-bottom: 60px;
+    margin-right: 50px;
+    display: flex;
+    flex-direction: column;
+}
+
+form .form-group-item input,
+form .form-group-item select {
+    border: none;
+    padding: 14px 28px;
+    height: 50px;
+    border-radius: 7px;
+    background: #F1F1F1;
+}
+form .form-group-item textarea {
+    border: none;
+    border-radius: 7px;
+    background: #F1F1F1;
+}
+
+
+.display-button {
+    display: flex;
+    justify-content: center;
+}
+
+.display-button button {
+    border: none;
+    padding: 8px 16px;
+    border-radius: 5.619px;
+    background: #52B788;
+    color: #FFF;
+    text-align: center;
+    font-family: Inter;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    }
+
+
+
+
+
+
+
+
+
+
