@@ -4,7 +4,6 @@ import viteLogo from '/vite.svg'
 import './App.css'
 import { createConversation, CreateConversationProps, createTemplate, CreateTemplateProps, getTemplates, createInteractionConversation } from './services'
 
-
 function App() {
   const [count, setCount] = useState(0)
 

@@ -41,7 +41,10 @@ export const createTemplate = (props: CreateTemplateProps): Promise<CreateTempla
                 'Content-Type': 'application/json',
             },
         })
-        .then((response) => response.data)
+        .then((response) => {
+            
+            return response.data
+        })
         .catch((error) => {
             console.error('Create template error: ', error);
             throw error;

@@ -20,4 +20,5 @@ export interface LocalStorageTemplate {
   typeContext: string;
   templateId: string;
   details: string;
+  conversation_id: string;
 }
