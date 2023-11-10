@@ -2,7 +2,8 @@ import { useEffect, useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
-import { createTemplate, CreateTemplateProps, getTemplates } from './services'
+import { createConversation, CreateConversationProps, createTemplate, CreateTemplateProps, getTemplates, createInteractionConversation } from './services'
+
 
 function App() {
   const [count, setCount] = useState(0)
@@ -12,20 +13,37 @@ function App() {
     console.log(response)
   }
 
-  const _createTemplates = async (content: string, name: string) => {
+  const _createTemplates = async (content: string) => {
     const input: CreateTemplateProps = {
       content: content,
       variables: {
-        "name": name
+        "name": "string"
       }
     }
     const response = await createTemplate(input);
     console.log(response)
   }
 
+  const _createConversation = async (variables: Record<string, string>, prompt_id: string) => {
+    const input: CreateConversationProps = {
+      temperature: 0.7,
+      variables: variables,
+      prompt_id: prompt_id
+    }
+    const response = await createConversation(input);
+    console.log(response)
+  }
+
+  const _createInteractionConversation = async (conversation_id: string, message: string) => {
+    const response = await createInteractionConversation(conversation_id, message)
+    console.log(response)
+  }
+
   useEffect(() => {
     // _getTemplates();
-    // _createTemplates("Bora bill!", "Teste");
+    // _createTemplates("Bora bill!");
+    // _createConversation({ "name": "All" }, "625c9785-0ce1-435d-b7b3-a08aeea11cf8");
+    // _createInteractionConversation("6da11d25-5331-4870-9c75-95d846f22fe0", "Olá");;
   }, [])
 
   return (
@@ -55,3 +73,18 @@ function App() {
 }
 
 export default App
+
+
+// {
+//   "content": "Bora bill!",
+//     "variables": {
+//     "name": "string"
+//   },
+//   "id": "625c9785-0ce1-435d-b7b3-a08aeea11cf8"
+// }
+
+
+// "After cretae conversation":
+// {
+//   "id": "6da11d25-5331-4870-9c75-95d846f22fe0"
+// }
