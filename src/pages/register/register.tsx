@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
-import { createTemplateLocal, parseTemplate } from "../../LocalStorage";
+import { createTemplateLocal, parseTemplate, setSessionKey } from "../../LocalStorage";
 import bottomLeft from "../../assets/bottom-left.svg";
 import topRight from "../../assets/top-right.svg";
-import { createTemplate } from "../../services";
+import { createConversation, createTemplate } from "../../services";
 import "./register.css";
+import { Keys } from "../../enums";
+import { Conversation } from "../../types";
+import { useNavigate } from "react-router-dom";
 
 export default function Register() {
   const [newNiche, setNewNiche] = useState(false);
@@ -14,6 +17,8 @@ export default function Register() {
   const [name, setName] = useState("");
   const [context, setContext] = useState("");
   const [details, setDetails] = useState("");
+
+  const navigate = useNavigate();
 
   const defaultNiches = [
     "Restaurante/Lanchonete",
@@ -56,22 +61,39 @@ export default function Register() {
       template_name: name,
     });
 
+    const variables = {}
+
     const { id } = await createTemplate({
       content: templateContent,
-      variables: {},
+      variables: variables,
+    });
+    
+    const conversation_id = await handleCreateConversation(variables, id!);
+    
+    createTemplateLocal({
+      details: details,
+      niche: niche,
+      name: company,
+      typeContext: context,
+      template_name: name,
+      id: id,
+      conversation_id: conversation_id
     });
 
-    if (id) {
-      createTemplateLocal({
-        details: details,
-        niche: niche,
-        name: company,
-        typeContext: context,
-        template_name: name,
-        id: id,
-      });
-    }
+
+    navigate(`/chat/${conversation_id}`);
   };
+  
+  const handleCreateConversation = async (variables: Record<string, string>, prompt_id: string): Promise<string> => {
+    const input: Conversation = {
+      temperature: 0.7,
+      variables: variables,
+      prompt_id: prompt_id
+    }
+    const { id } = await createConversation(input);
+    setSessionKey(Keys.conversation_id, id);
+    return id
+  }
 
   useEffect(() => {
     createTemplateLocal({
@@ -91,9 +113,9 @@ export default function Register() {
         <div className="row">
           <div className="col-md-12">
             <div className="content-register">
-              <header>
+              {/* <header>
                 <h1>Gera Samba</h1>
-              </header>
+              </header> */}
               <h2>Cadastro do BOT</h2>
               <form>
                 <div className="form-group">

@@ -1,50 +1,32 @@
-import { useState } from 'react'
-import { createConversation, createTemplate, getTemplates, interactionConversation } from '../../services'
-import { getSessionKey, setSessionKey } from '../../LocalStorage'
-import { Conversation, Messages, Template } from '../../types'
-
-export enum Keys {
-    messages = "MESSAGES",
-    conversation_id = "CONVERSATION_ID",
-    template_id = "TEMPLATE_ID"
-}
+import "./chat.css";
+import { useEffect, useState } from 'react'
+import { interactionConversation } from '../../services'
+import { getMessageStorange, setSessionKey } from '../../LocalStorage'
+import { Messages } from '../../types'
+import Toastify from 'toastify-js';
+import "toastify-js/src/toastify.css"
+import { Keys } from '../../enums';
+import { useParams } from 'react-router-dom';
 
 function Chat() {
+    const { id } = useParams();
+
+    const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState('');
     const [messages, setMessages] = useState<Messages[]>([]);
-    const [templates, setTemplates] = useState<Template[]>()
-
-    const _getTemplates = async () => {
-        const response = await getTemplates();
-        setTemplates(response);
-    }
-
-    const _createTemplate = async (content: string, variables: Record<string, string>) => {
-        const input: Template = {
-            content: content,
-            variables: variables
-        }
-        const { id } = await createTemplate(input);
-        if (id) setSessionKey(Keys.messages, id);
-    }
-
-    const _createConversation = async (variables: Record<string, string>, prompt_id: string) => {
-        const input: Conversation = {
-            temperature: 0.7,
-            variables: variables,
-            prompt_id: prompt_id
-        }
-        const { id } = await createConversation(input);
-        setSessionKey(Keys.conversation_id, id);
-    }
 
     const _interactionConversation = async (conversation_id: string, message: string) => {
         try {
+            setLoading(true)
             const res = await interactionConversation(conversation_id, message);
-            setMessages((prev) => ([...prev, { from: "service", message: res.message }]));
-            setSessionKey(Keys.template_id, JSON.stringify(messages));
+            let dataMessages = [...messages, { from: "client", message: message }, { from: "service", message: res.message }]
+            setMessages(dataMessages);
+            setSessionKey(Keys.messages, JSON.stringify(dataMessages));
         } catch (error) {
+            handleError("Ops, algo deu errado!");
             console.error('[interactionConversation]: ', error);
+        } finally {
+            setLoading(false);
         }
     }
 
@@ -54,30 +36,44 @@ function Chat() {
 
     const handleSubmit = async () => {
         if (message.trim() !== '') {
-            setMessages((prev) => ([...prev, { from: "client", message: message }]));
             setMessage('');
-            const conversation_id = getSessionKey("conversation_id");
-            if (conversation_id) {
-                _interactionConversation(conversation_id, message);
-            }
+            if (id) _interactionConversation(id, message);
         }
     };
 
-    const teste = () => {
-        // _getTemplates();
-        _createTemplate("", {
-            "name": "string",
-        });
+    const handleError = (error: string) => {
+        Toastify({
+            text: error,
+            duration: 3000,
+            style: {
+                background: "red",
+            }
+
+        }).showToast();
     }
 
+    useEffect(() => {
+        const messageData = getMessageStorange(Keys.messages);
+        setMessages(messageData);
+    }, [])
+
     return (
-        <div>
-            <div>
+        <div className='chat'>
+
+            <div className="messages">
                 {messages.map((msg, index) => (
-                    <p key={index} style={{ whiteSpace: 'pre-line' }}>{msg.message}</p>
+                    <p
+                        key={index}
+                        className={msg.from === 'client' ? 'client-message' : 'bot-message'}
+                    >
+                        {msg.message}
+                    </p>
                 ))}
             </div>
-            <div>
+
+            <p className="message-loading">{loading && '...loading'}</p>
+            
+            <div className='message_input'>
                 <input
                     type="text"
                     value={message}
@@ -85,12 +81,8 @@ function Chat() {
                     placeholder="Digite sua mensagem..."
                 />
                 <button onClick={handleSubmit}>Enviar</button>
-
-                <button style={{
-                    marginTop: 20
-                }} onClick={teste}> TESTE </button>
-
             </div>
+
         </div>
     );
 
@@ -112,3 +104,27 @@ export default Chat
 // {
 //   "id": "6da11d25-5331-4870-9c75-95d846f22fe0"
 // }
+
+/*
+<div>
+                {messages.map((msg, index) => (
+                    <p key={index} style={{ whiteSpace: 'pre-line' }}>
+                        {msg.from}: {msg.message}
+                    </p>
+                ))}
+            </div>
+            <div>
+                <input
+                    type="text"
+                    value={message}
+                    onChange={handleMessageChange}
+                    placeholder="Digite sua mensagem..."
+                />
+                <button onClick={handleSubmit}>Enviar</button>
+
+                <button style={{
+                    marginTop: 20
+                }} onClick={teste}> TESTE </button>
+
+            </div>
+*/
