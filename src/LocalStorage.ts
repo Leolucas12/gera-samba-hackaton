@@ -1,14 +1,19 @@
 import { LocalStorageTemplate } from "./types";
 
-export const createItem = (id: string, props: LocalStorageTemplate) => {
-  const stringStored = JSON.stringify(props);
-  localStorage.setItem(id, stringStored);
+export const createTemplateLocal = (props: LocalStorageTemplate) => {
+  const templates = getTemplatesLocal();
+  templates.push(props);
+  const stringStored = JSON.stringify(templates);
+  localStorage.setItem("gera-samba:templates", stringStored);
 };
 
-export const readItem = (id: string) => {
-  const stringStored = localStorage.getItem(id);
+export const getTemplatesLocal = () => {
+  const stringStored = localStorage.getItem("gera-samba:templates");
   if (stringStored) {
     return JSON.parse(stringStored);
+  } else {
+    localStorage.setItem("gera-samba:templates", JSON.stringify([]));
+    return [];
   }
 };
 

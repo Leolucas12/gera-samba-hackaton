@@ -1,8 +1,7 @@
 import { useState } from 'react'
-import './App.css'
-import { createConversation, createTemplate, getTemplates, interactionConversation } from '../services'
-import { getSessionKey, setSessionKey } from '../LocalStorage'
-import { Conversation, Messages, Template } from '../types'
+import { createConversation, createTemplate, getTemplates, interactionConversation } from '../../services'
+import { getSessionKey, setSessionKey } from '../../LocalStorage'
+import { Conversation, Messages, Template } from '../../types'
 
 export enum Keys {
     messages = "MESSAGES",

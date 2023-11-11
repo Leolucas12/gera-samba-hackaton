@@ -8,6 +8,7 @@ export interface LocalStorageTemplate {
   typeContext: string;
   details: string;
   template_name: string;
+  id?: string;
 }
 
 export type Template = {

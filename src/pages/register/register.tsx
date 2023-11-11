@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { createItem, parseTemplate } from "../../LocalStorage";
+import { useEffect, useState } from "react";
+import { createTemplateLocal, parseTemplate } from "../../LocalStorage";
 import bottomLeft from "../../assets/bottom-left.svg";
 import topRight from "../../assets/top-right.svg";
 import { createTemplate } from "../../services";
@@ -62,17 +62,27 @@ export default function Register() {
     });
 
     if (id) {
-      createItem(id, {
+      createTemplateLocal({
         details: details,
         niche: niche,
         name: company,
         typeContext: context,
         template_name: name,
+        id: id,
       });
     }
-    console.log(id);
   };
 
+  useEffect(() => {
+    createTemplateLocal({
+      details: "teste",
+      niche: "educacao",
+      name: "programar",
+      typeContext: "atendimento",
+      template_name: "programar",
+      id: "123",
+    });
+  }, []);
   return (
     <div className="register">
       <div className="container">
