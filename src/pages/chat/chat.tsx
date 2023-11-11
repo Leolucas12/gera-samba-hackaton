@@ -37,7 +37,7 @@ function Chat() {
         { from: "service", message: res.message },
       ];
       setMessages(dataMessages);
-      setSessionKey(Keys.messages, JSON.stringify(dataMessages));
+        setSessionKey(`${Keys.messages}:${id}`, JSON.stringify(dataMessages));
     } catch (error) {
       handleError("Ops, algo deu errado!");
       console.error("[interactionConversation]: ", error);
@@ -77,7 +77,7 @@ function Chat() {
   };
 
   useEffect(() => {
-    const messageData = getMessageStorange(Keys.messages);
+      const messageData = getMessageStorange(`${Keys.messages}:${id}`);
     setMessages(messageData);
     getCurrentTemplate();
   }, []);
@@ -90,13 +90,14 @@ function Chat() {
         {messages.map((msg, index) => (
           <div
             className={msg.from === "client" ? "client-message" : "bot-message"}
+            key={index}
           >
             {msg.from !== "client" ? (
               <div className="chat-icons">BOT</div>
             ) : (
               <></>
             )}
-            <p key={index}>{msg.message}</p>
+            <p>{msg.message}</p>
             {msg.from === "client" ? (
               <div className="chat-icons">EU</div>
             ) : (
