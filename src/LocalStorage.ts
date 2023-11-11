@@ -1,32 +1,30 @@
-import { LocalStorageTemplate } from "./types"
+import { LocalStorageTemplate } from "./types";
 
-export const createSession = (props: LocalStorageTemplate) => {
-   let stringStored = JSON.stringify(props)
-   localStorage.setItem(props.templateId, stringStored);
-}
+export const createTemplateLocal = (props: LocalStorageTemplate) => {
+  const templates = getTemplatesLocal();
+  templates.push(props);
+  const stringStored = JSON.stringify(templates);
+  localStorage.setItem("gera-samba:templates", stringStored);
+};
 
-export const readSession = (props: LocalStorageTemplate) => {
-   let stringStored = localStorage.getItem(props.templateId)
-   if (stringStored) {
-      return JSON.parse(stringStored);
-   }
-}
+export const getTemplatesLocal = () => {
+  const stringStored = localStorage.getItem("gera-samba:templates");
+  if (stringStored) {
+    return JSON.parse(stringStored);
+  } else {
+    localStorage.setItem("gera-samba:templates", JSON.stringify([]));
+    return [];
+  }
+};
 
-export const parseSession = (props: LocalStorageTemplate) => {
-   let data;
-   let stringStored = localStorage.getItem(props.templateId)
-   if (stringStored) {
-      data = JSON.parse(stringStored);
-      return `Você é um Bot que atua no canal de whatsapp trabalhando para loja ${data.name}.\n ${data.name} é uma loja de ${data.niche} \nO cliente que você está atendendo se chama {nome}, comece o ${data.typeContext}, ${data.details}`
-   }
-}
-
+export const parseTemplate = (props: LocalStorageTemplate) => {
+  return `Você é um Bot que atua no canal de whatsapp trabalhando para a empresa ${props.name}. ${props.name} é uma empresa de ${props.niche}. Comece a fazer o ${props.typeContext}. Mais informações sobre como deve ser a conversa: ${props.details}`;
+};
 
 export const setSessionKey = (key: string, value: string) => {
-   localStorage.setItem(key, value);
-}
-
+  localStorage.setItem(key, value);
+};
 
 export const getSessionKey = (key: string): string | null => {
-   return localStorage.getItem(key);
-}
+  return localStorage.getItem(key);
+};
