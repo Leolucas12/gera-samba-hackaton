@@ -2,6 +2,8 @@ import { useState } from "react";
 import "./register.css";
 import bottomLeft from "../../assets/bottom-left.svg";
 import topRight from "../../assets/top-right.svg";
+import { parseTemplate } from "../../LocalStorage";
+import { createTemplate } from "../../services";
 
 export default function Register() {
   const [newNiche, setNewNiche] = useState(false);
@@ -36,17 +38,29 @@ export default function Register() {
 
   const handleContext = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const value = event.currentTarget.value;
-    console.log(value);
     if (value === "Outro") {
       setNewContext(true);
       setContext("");
       return;
     }
-    setNiche(value);
+    setContext(value);
   };
 
-  const handleCreateTemplate = (event: React.FormEvent) => {
+  const handleCreateTemplate = async (event: React.FormEvent) => {
     event.preventDefault();
+    const templateContent = parseTemplate({
+      details: details,
+      niche: niche,
+      name: company,
+      typeContext: context,
+    });
+
+    const { id } = await createTemplate({
+      content: templateContent,
+      variables: {},
+    });
+
+    console.log(id);
   };
 
   return (

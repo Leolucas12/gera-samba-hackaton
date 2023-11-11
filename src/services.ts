@@ -1,30 +1,81 @@
-const {
-    VITE_BASE_API
-} = import.meta.env
+import axios from 'axios';
+import { Conversation, Template, InteractionConversation } from './types';
 
-export const getTemplates = async () => {
-    const url = `${VITE_BASE_API}/prompt-templates/`
-    
-    fetch(url, {
-        method: "GET",
-        mode: "no-cors",
-        headers: {
-            "Content-Type": "application/json"
-        }
-    }).then(response => {
-        return response.json();
-    }).catch(error => {
-        console.error("Get templates: ", error);
-    })
+const { VITE_BASE_API } = import.meta.env;
 
+type Id = {
+    id: string
 }
 
+export const getTemplates = (): Promise<(Template)[]> => {
+    const url = `${VITE_BASE_API}/prompt-templates/`;
 
-export const createTemplate = () => { }
+    return axios
+        .get(url, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+        .then((response) => response.data)
+        .catch((error) => {
+            console.error('Get templates: ', error);
+            throw error;
+        });
+};
 
 
-export const createConversation = () => { }
+export const createTemplate = (props: Template): Promise<Template> => {
+    const url = `${VITE_BASE_API}/prompt-templates/`;
+
+    return axios
+        .post(url, props, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+        .then((response) => {
+            return response.data
+        })
+        .catch((error) => {
+            console.error('Create template error: ', error);
+            throw error;
+        });
+};
 
 
-export const createInteractionConversation = () => { }
+export const createConversation = (props: Conversation): Promise<Id> => {
+    const url = `${VITE_BASE_API}/conversations/`;
 
+    return axios
+        .post(url, props, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+        .then((response) => {
+            return response.data
+        })
+        .catch((error) => {
+            console.error('Create template error: ', error);
+            throw error;
+        });
+};
+
+
+export const interactionConversation = (conversation_id: string, message: string): Promise<InteractionConversation> => {
+    const url = `${VITE_BASE_API}/conversations/${conversation_id}/interactions`;
+
+    return axios
+        .post(url, {
+            message: message
+        }, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+        .then(response => response.data)
+        .catch((error) => {
+            console.error('Create template error: ', error);
+            throw error;
+        });
+};
