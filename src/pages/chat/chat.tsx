@@ -1,15 +1,10 @@
 import { useState } from 'react'
-import { createConversation, createTemplate, getTemplates, interactionConversation } from '../services'
-import { getSessionKey, setSessionKey } from '../LocalStorage'
-import { Conversation, Messages, Template } from '../types'
+import { createConversation, createTemplate, getTemplates, interactionConversation } from '../../services'
+import { getSessionKey, setSessionKey } from '../../LocalStorage'
+import { Conversation, Messages, Template } from '../../types'
 import Toastify from 'toastify-js';
 import "toastify-js/src/toastify.css"
-
-export enum Keys {
-    messages = "MESSAGES",
-    conversation_id = "CONVERSATION_ID",
-    template_id = "TEMPLATE_ID"
-}
+import { Keys } from '../../enums';
 
 function Chat() {
     const [message, setMessage] = useState('');
@@ -35,16 +30,6 @@ function Chat() {
         }
     }
 
-    const _createConversation = async (variables: Record<string, string>, prompt_id: string) => {
-        const input: Conversation = {
-            temperature: 0.7,
-            variables: variables,
-            prompt_id: prompt_id
-        }
-        const { id } = await createConversation(input);
-        setSessionKey(Keys.conversation_id, id);
-    }
-
     const _interactionConversation = async (conversation_id: string, message: string) => {
         try {
             const res = await interactionConversation(conversation_id, message);
@@ -64,7 +49,7 @@ function Chat() {
     const handleSubmit = async () => {
         if (message.trim() !== '') {
             setMessage('');
-            const conversation_id = getSessionKey("conversation_id");
+            const conversation_id = getSessionKey(Keys.conversation_id);
             if (conversation_id) {
                 _interactionConversation(conversation_id, message);
             }
