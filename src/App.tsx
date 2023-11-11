@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import './App.css'
 import { createConversation, createTemplate, getTemplates, interactionConversation } from './services'
 import { getSessionKey, setSessionKey } from './LocalStorage'
@@ -64,6 +64,9 @@ function App() {
     }
   };
 
+  const teste = () => {
+    _getTemplates();
+  }
 
   return (
     <div>
@@ -80,6 +83,11 @@ function App() {
           placeholder="Digite sua mensagem..."
         />
         <button onClick={handleSubmit}>Enviar</button>
+
+        <button style={{
+          marginTop: 20
+        }} onClick={teste}> TESTE </button>
+
       </div>
     </div>
   );
