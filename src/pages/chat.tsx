@@ -2,6 +2,8 @@ import { useState } from 'react'
 import { createConversation, createTemplate, getTemplates, interactionConversation } from '../services'
 import { getSessionKey, setSessionKey } from '../LocalStorage'
 import { Conversation, Messages, Template } from '../types'
+import Toastify from 'toastify-js';
+import "toastify-js/src/toastify.css"
 
 export enum Keys {
     messages = "MESSAGES",
@@ -24,8 +26,13 @@ function Chat() {
             content: content,
             variables: variables
         }
-        const { id } = await createTemplate(input);
-        if (id) setSessionKey(Keys.template_id, id);
+        try{
+            const { id } = await createTemplate(input);
+            if (id) setSessionKey(Keys.template_id, id);
+        }catch(error)
+        {
+            handleError("Ops, Algo deu errado!")
+        }
     }
 
     const _createConversation = async (variables: Record<string, string>, prompt_id: string) => {
@@ -45,6 +52,7 @@ function Chat() {
             setMessages(dataMessages);
             setSessionKey(Keys.messages, JSON.stringify(dataMessages));
         } catch (error) {
+            handleError("Ops, algo deu errado!");
             console.error('[interactionConversation]: ', error);
         }
     }
@@ -63,6 +71,9 @@ function Chat() {
         }
     };
 
+    /**
+     * Server apenas e unicamente para testes
+     */
     const teste = () => {
         // _getTemplates();
         // _createTemplate("Você é um vendedor de roupas masculinas! Venda!!!", {
@@ -72,8 +83,19 @@ function Chat() {
         // if (template_id)_createConversation({
         //     "name": "Allyson"
         // }, template_id );
-        const conversation_id = getSessionKey(Keys.conversation_id)
-        if (conversation_id) _interactionConversation(conversation_id, "Olá, boa tarde!")
+        // const conversation_id = getSessionKey(Keys.conversation_id)
+        // if (conversation_id) _interactionConversation(conversation_id, "Olá, boa tarde!")
+    }
+
+    const handleError = (error : string) => {
+        Toastify({
+            text: error,
+            duration: 3000,
+            style: {
+                background: "red",
+            }
+
+        }).showToast();
     }
 
     return (
