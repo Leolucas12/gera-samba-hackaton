@@ -35,10 +35,13 @@
     margin-top: 60px;
     display: flex;
     flex-direction: column;
+    align-items: center;
 }
 
 form .form-group {
+    width: 70%;
     display: flex;
+    justify-content: space-between;
 }
 
 .form-group label {
@@ -49,9 +52,8 @@ form .form-group {
 }
 
 form .form-group-item {
-    width: 50%;
+    width: 45%;
     margin-bottom: 60px;
-    margin-right: 50px;
     display: flex;
     flex-direction: column;
 }
@@ -64,12 +66,21 @@ form .form-group-item select {
     border-radius: 7px;
     background: #F1F1F1;
 }
-form .form-group-item textarea {
+form .form-group-textarea {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+    margin-bottom: 5%;
+}
+
+form .form-group-textarea textarea {
+    padding: 14px 28px;
     border: none;
     border-radius: 7px;
     background: #F1F1F1;
+    width: 100%;
 }
-
 
 .display-button {
     display: flex;
@@ -88,7 +99,19 @@ form .form-group-item textarea {
     font-style: normal;
     font-weight: 400;
     line-height: normal;
-    }
+}
+
+.top-right {
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+.bottom-left {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+}
 
 
 
