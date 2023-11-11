@@ -13,7 +13,8 @@ export default function List() {
 
   useEffect(() => {
     const templates = getTemplatesLocal();
-    setTemplates(templates);
+    const templatesFilter = templates.filter((t: LocalStorageTemplate) => !!t.conversation_id)
+    setTemplates(templatesFilter);
   }, []);
 
   return (
@@ -32,9 +33,9 @@ export default function List() {
       </div>
 
       <div className="all-bots">
-        {templates?.map((template) => {
+        {templates?.map((template, index) => {
           return (
-            <div className="bot-container">
+            <div className="bot-container" key={index}>
               <img src={support} />
               <section className="bot-desc">
                 <h3>{template.template_name}</h3>
