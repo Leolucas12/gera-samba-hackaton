@@ -1,9 +1,9 @@
 import { useState } from "react";
-import "./register.css";
+import { createItem, parseTemplate } from "../../LocalStorage";
 import bottomLeft from "../../assets/bottom-left.svg";
 import topRight from "../../assets/top-right.svg";
-import { parseTemplate } from "../../LocalStorage";
 import { createTemplate } from "../../services";
+import "./register.css";
 
 export default function Register() {
   const [newNiche, setNewNiche] = useState(false);
@@ -53,6 +53,7 @@ export default function Register() {
       niche: niche,
       name: company,
       typeContext: context,
+      template_name: name,
     });
 
     const { id } = await createTemplate({
@@ -60,6 +61,15 @@ export default function Register() {
       variables: {},
     });
 
+    if (id) {
+      createItem(id, {
+        details: details,
+        niche: niche,
+        name: company,
+        typeContext: context,
+        template_name: name,
+      });
+    }
     console.log(id);
   };
 

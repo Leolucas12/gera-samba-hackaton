@@ -1,12 +1,12 @@
 import { LocalStorageTemplate } from "./types";
 
-export const createSession = (props: LocalStorageTemplate) => {
+export const createItem = (id: string, props: LocalStorageTemplate) => {
   const stringStored = JSON.stringify(props);
-  localStorage.setItem("current-template", stringStored);
+  localStorage.setItem(id, stringStored);
 };
 
-export const readSession = () => {
-  const stringStored = localStorage.getItem("current-template");
+export const readItem = (id: string) => {
+  const stringStored = localStorage.getItem(id);
   if (stringStored) {
     return JSON.parse(stringStored);
   }

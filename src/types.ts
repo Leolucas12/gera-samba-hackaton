@@ -6,9 +6,8 @@ export interface LocalStorageTemplate {
   name: string;
   niche: string;
   typeContext: string;
-  templateId?: string;
   details: string;
-  conversation_id?: string;
+  template_name: string;
 }
 
 export type Template = {
