@@ -16,7 +16,7 @@ function App() {
       element: <Chat />,
     },
     {
-      path: "list",
+      path: "/list",
       element: <List />,
     },
   ]);
