@@ -1,49 +1,49 @@
 import { useState } from 'react'
 import './App.css'
-import { createTemplate, getTemplates, interactionConversation } from './services'
-import { getSessionKey } from './LocalStorage'
-import { Template } from './types'
+import { createConversation, createTemplate, getTemplates, interactionConversation } from './services'
+import { getSessionKey, setSessionKey } from './LocalStorage'
+import { Conversation, Messages, Template } from './types'
 
-type Messages = {
-  from: string;
-  message: string
+export enum Keys {
+  messages = "MESSAGES",
+  conversation_id = "CONVERSATION_ID",
+  template_id = "TEMPLATE_ID"
 }
 
 function App() {
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState<Messages[]>([]);
-  
   const [templates, setTemplates] = useState<Template[]>()
 
   const _getTemplates = async () => {
     const response = await getTemplates();
     setTemplates(response);
-    console.log(templates);
   }
 
-  const _createTemplates = async (content: string, variables: Record<string, string>) => {
+  const _createTemplate = async (content: string, variables: Record<string, string>) => {
     const input: Template = {
       content: content,
       variables: variables
     }
-    const response = await createTemplate(input);
-    console.log(response)
+    const { id } = await createTemplate(input);
+    if (id) setSessionKey(Keys.messages, id);
   }
 
   const _createConversation = async (variables: Record<string, string>, prompt_id: string) => {
-    const input: CreateConversationProps = {
+    const input: Conversation = {
       temperature: 0.7,
       variables: variables,
       prompt_id: prompt_id
     }
-    const response = await createConversation(input);
-    console.log(response)
+    const { id } = await createConversation(input);
+    setSessionKey(Keys.conversation_id, id);
   }
 
   const _interactionConversation = async (conversation_id: string, message: string) => {
     try {
       const res = await interactionConversation(conversation_id, message);
       setMessages((prev) => ([...prev, { from: "service", message: res.message }]));
+      setSessionKey(Keys.template_id, JSON.stringify(messages));
     } catch (error) {
       console.error('[interactionConversation]: ', error);
     }

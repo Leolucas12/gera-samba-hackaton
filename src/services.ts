@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { setSessionKey } from './LocalStorage';
 import { Conversation, Template, InteractionConversation } from './types';
 
 const { VITE_BASE_API } = import.meta.env;
@@ -35,7 +34,6 @@ export const createTemplate = (props: Template): Promise<Template> => {
             },
         })
         .then((response) => {
-            setSessionKey("template_id", response.data.id);
             return response.data
         })
         .catch((error) => {
@@ -55,7 +53,6 @@ export const createConversation = (props: Conversation): Promise<Id> => {
             },
         })
         .then((response) => {
-            setSessionKey("conversation_id", response.data.id);
             return response.data
         })
         .catch((error) => {

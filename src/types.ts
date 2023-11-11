@@ -27,3 +27,8 @@ export type Conversation = {
 export type InteractionConversation = {
   message: string
 }
+
+export type Messages = {
+  from: string;
+  message: string
+}
