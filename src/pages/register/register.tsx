@@ -1,12 +1,12 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { createTemplateLocal, parseTemplate, setSessionKey } from "../../LocalStorage";
 import bottomLeft from "../../assets/bottom-left.svg";
 import topRight from "../../assets/top-right.svg";
-import { createConversation, createTemplate } from "../../services";
-import "./register.css";
 import { Keys } from "../../enums";
+import { createConversation, createTemplate } from "../../services";
 import { Conversation } from "../../types";
-import { useNavigate } from "react-router-dom";
+import "./register.css";
 
 export default function Register() {
   const [newNiche, setNewNiche] = useState(false);
@@ -95,16 +95,6 @@ export default function Register() {
     return id
   }
 
-  useEffect(() => {
-    createTemplateLocal({
-      details: "teste",
-      niche: "educacao",
-      name: "programar",
-      typeContext: "atendimento",
-      template_name: "programar",
-      id: "123",
-    });
-  }, []);
   return (
     <div className="register">
       <div className="container">
@@ -113,9 +103,9 @@ export default function Register() {
         <div className="row">
           <div className="col-md-12">
             <div className="content-register">
-              {/* <header>
+              <header>
                 <h1>Gera Samba</h1>
-              </header> */}
+              </header>
               <h2>Cadastro do BOT</h2>
               <form>
                 <div className="form-group">
