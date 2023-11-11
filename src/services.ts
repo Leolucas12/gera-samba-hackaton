@@ -1,22 +1,14 @@
 import axios from 'axios';
-import { createSession, setSessionKey } from './LocalStorage';
+import { setSessionKey } from './LocalStorage';
+import { Conversation, Template, InteractionConversation } from './types';
 
 const { VITE_BASE_API } = import.meta.env;
 
+type Id = {
+    id: string
+}
 
-export type CreateTemplateProps = {
-    id?: string;
-    content: string;
-    variables: Record<string, string>;
-};
-
-export type CreateConversationProps = {
-    prompt_id: string;
-    variables: Record<string, string>;
-    temperature: number;
-};
-
-export const getTemplates = (): Promise<CreateTemplateProps[]> => {
+export const getTemplates = (): Promise<(Template)[]> => {
     const url = `${VITE_BASE_API}/prompt-templates/`;
 
     return axios
@@ -33,7 +25,7 @@ export const getTemplates = (): Promise<CreateTemplateProps[]> => {
 };
 
 
-export const createTemplate = (props: CreateTemplateProps): Promise<CreateTemplateProps> => {
+export const createTemplate = (props: Template): Promise<Template> => {
     const url = `${VITE_BASE_API}/prompt-templates/`;
 
     return axios
@@ -52,7 +44,8 @@ export const createTemplate = (props: CreateTemplateProps): Promise<CreateTempla
         });
 };
 
-export const createConversation = (props: CreateConversationProps): Promise<string> => {
+
+export const createConversation = (props: Conversation): Promise<Id> => {
     const url = `${VITE_BASE_API}/conversations/`;
 
     return axios
@@ -63,7 +56,6 @@ export const createConversation = (props: CreateConversationProps): Promise<stri
         })
         .then((response) => {
             setSessionKey("conversation_id", response.data.id);
-
             return response.data
         })
         .catch((error) => {
@@ -72,7 +64,8 @@ export const createConversation = (props: CreateConversationProps): Promise<stri
         });
 };
 
-export const createInteractionConversation = (conversation_id: string, message: string) => {
+
+export const interactionConversation = (conversation_id: string, message: string): Promise<InteractionConversation> => {
     const url = `${VITE_BASE_API}/conversations/${conversation_id}/interactions`;
 
     return axios
@@ -83,7 +76,7 @@ export const createInteractionConversation = (conversation_id: string, message: 
                 'Content-Type': 'application/json',
             },
         })
-        .then((response) => response.data)
+        .then(response => response.data)
         .catch((error) => {
             console.error('Create template error: ', error);
             throw error;

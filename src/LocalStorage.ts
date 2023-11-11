@@ -27,6 +27,6 @@ export const setSessionKey = (key: string, value: string) => {
 }
 
 
-export const getSessionKey = (key: string) => {
-   localStorage.getItem(key);
+export const getSessionKey = (key: string): string | null => {
+   return localStorage.getItem(key);
 }

@@ -1,15 +1,3 @@
-export interface Template {
-  id: string;
-  content: string;
-  variables: unknown;
-}
-
-export interface Conversation {
-  prompt_id: string;
-  variables: unknown;
-  temperature: number;
-}
-
 export interface Interaction {
   message: string;
 }
@@ -21,4 +9,21 @@ export interface LocalStorageTemplate {
   templateId: string;
   details: string;
   conversation_id: string;
+}
+
+export type Template = {
+  id?: string
+  content: string;
+  variables: Record<string, string>;
+};
+
+export type Conversation = {
+  id?: string
+  prompt_id: string;
+  variables: Record<string, string>;
+  temperature: number;
+};
+
+export type InteractionConversation = {
+  message: string
 }

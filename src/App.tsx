@@ -1,23 +1,30 @@
-import { useEffect, useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { useState } from 'react'
 import './App.css'
-import { createConversation, CreateConversationProps, createTemplate, CreateTemplateProps, getTemplates, createInteractionConversation } from './services'
+import { createTemplate, getTemplates, interactionConversation } from './services'
+import { getSessionKey } from './LocalStorage'
+import { Template } from './types'
+
+type Messages = {
+  from: string;
+  message: string
+}
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [message, setMessage] = useState('');
+  const [messages, setMessages] = useState<Messages[]>([]);
+  
+  const [templates, setTemplates] = useState<Template[]>()
 
   const _getTemplates = async () => {
     const response = await getTemplates();
-    console.log(response)
+    setTemplates(response);
+    console.log(templates);
   }
 
-  const _createTemplates = async (content: string) => {
-    const input: CreateTemplateProps = {
+  const _createTemplates = async (content: string, variables: Record<string, string>) => {
+    const input: Template = {
       content: content,
-      variables: {
-        "name": "string"
-      }
+      variables: variables
     }
     const response = await createTemplate(input);
     console.log(response)
@@ -33,42 +40,50 @@ function App() {
     console.log(response)
   }
 
-  const _createInteractionConversation = async (conversation_id: string, message: string) => {
-    const response = await createInteractionConversation(conversation_id, message)
-    console.log(response)
+  const _interactionConversation = async (conversation_id: string, message: string) => {
+    try {
+      const res = await interactionConversation(conversation_id, message);
+      setMessages((prev) => ([...prev, { from: "service", message: res.message }]));
+    } catch (error) {
+      console.error('[interactionConversation]: ', error);
+    }
   }
 
-  useEffect(() => {
-    // _getTemplates();
-    // _createTemplates("Bora bill!");
-    // _createConversation({ "name": "All" }, "625c9785-0ce1-435d-b7b3-a08aeea11cf8");
-    // _createInteractionConversation("6da11d25-5331-4870-9c75-95d846f22fe0", "Olá");;
-  }, [])
+  const handleMessageChange = (e: any) => {
+    setMessage(e.target.value);
+  };
+
+  const handleSubmit = async () => {
+    if (message.trim() !== '') {
+      setMessages((prev) => ([...prev, { from: "client", message: message }]));
+      setMessage('');
+      const conversation_id = getSessionKey("conversation_id");
+      if (conversation_id) {
+        _interactionConversation(conversation_id, message);
+      }
+    }
+  };
+
 
   return (
-    <>
+    <div>
       <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+        {messages.map((msg, index) => (
+          <p key={index} style={{ whiteSpace: 'pre-line' }}>{msg.message}</p>
+        ))}
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
+      <div>
+        <input
+          type="text"
+          value={message}
+          onChange={handleMessageChange}
+          placeholder="Digite sua mensagem..."
+        />
+        <button onClick={handleSubmit}>Enviar</button>
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    </div>
+  );
+
 }
 
 export default App
