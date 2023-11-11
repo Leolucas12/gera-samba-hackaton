@@ -1,4 +1,4 @@
-import { LocalStorageTemplate } from "./types";
+import { LocalStorageTemplate, Messages } from "./types";
 
 export const createTemplateLocal = (props: LocalStorageTemplate) => {
   const templates = getTemplatesLocal();
@@ -27,4 +27,12 @@ export const setSessionKey = (key: string, value: string) => {
 
 export const getSessionKey = (key: string): string | null => {
   return localStorage.getItem(key);
+};
+
+export const getMessageStorange = (key: string): Messages[] => {
+  const messages = localStorage.getItem(key);
+  if (messages) {
+    return JSON.parse(messages);
+  }
+  return []
 };

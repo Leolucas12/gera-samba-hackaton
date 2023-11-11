@@ -67,7 +67,9 @@ export default function Register() {
       content: templateContent,
       variables: variables,
     });
-
+    
+    const conversation_id = await handleCreateConversation(variables, id!);
+    
     createTemplateLocal({
       details: details,
       niche: niche,
@@ -75,9 +77,9 @@ export default function Register() {
       typeContext: context,
       template_name: name,
       id: id,
+      conversation_id: conversation_id
     });
 
-    const conversation_id = await handleCreateConversation(variables, id!);
 
     navigate(`/chat/${conversation_id}`);
   };
@@ -111,9 +113,9 @@ export default function Register() {
         <div className="row">
           <div className="col-md-12">
             <div className="content-register">
-              <header>
+              {/* <header>
                 <h1>Gera Samba</h1>
-              </header>
+              </header> */}
               <h2>Cadastro do BOT</h2>
               <form>
                 <div className="form-group">

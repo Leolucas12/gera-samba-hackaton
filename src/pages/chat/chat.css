@@ -1,0 +1,29 @@
+.chat {
+    width: 80vw;
+    margin: 10px;
+    /* ou outra largura desejada */
+}
+
+.client-message {
+    text-align: right;
+    background-color: #DCF8C6;
+}
+
+.bot-message {
+    text-align: left;
+    background-color: #E6E6E6;
+}
+
+.bot-message, .client-message {
+    padding: 10px;
+    font-size: large;
+    font-weight: 600;
+}
+
+.message_input {
+    margin-top: 30px;
+}
+
+.message-loading {
+    text-align: right;
+}

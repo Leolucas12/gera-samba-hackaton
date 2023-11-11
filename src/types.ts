@@ -9,6 +9,7 @@ export interface LocalStorageTemplate {
   details: string;
   template_name: string;
   id?: string;
+  conversation_id?: string
 }
 
 export type Template = {
