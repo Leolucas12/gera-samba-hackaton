@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import './App.css'
 import { createConversation, createTemplate, getTemplates, interactionConversation } from '../services'
 import { getSessionKey, setSessionKey } from '../LocalStorage'
 import { Conversation, Messages, Template } from '../types'
@@ -26,7 +25,7 @@ function Chat() {
             variables: variables
         }
         const { id } = await createTemplate(input);
-        if (id) setSessionKey(Keys.messages, id);
+        if (id) setSessionKey(Keys.template_id, id);
     }
 
     const _createConversation = async (variables: Record<string, string>, prompt_id: string) => {
@@ -42,8 +41,9 @@ function Chat() {
     const _interactionConversation = async (conversation_id: string, message: string) => {
         try {
             const res = await interactionConversation(conversation_id, message);
-            setMessages((prev) => ([...prev, { from: "service", message: res.message }]));
-            setSessionKey(Keys.template_id, JSON.stringify(messages));
+            let dataMessages = [...messages,{from: "client", message: message},{ from: "service", message: res.message }]
+            setMessages(dataMessages);
+            setSessionKey(Keys.messages, JSON.stringify(dataMessages));
         } catch (error) {
             console.error('[interactionConversation]: ', error);
         }
@@ -55,7 +55,6 @@ function Chat() {
 
     const handleSubmit = async () => {
         if (message.trim() !== '') {
-            setMessages((prev) => ([...prev, { from: "client", message: message }]));
             setMessage('');
             const conversation_id = getSessionKey("conversation_id");
             if (conversation_id) {
@@ -66,16 +65,24 @@ function Chat() {
 
     const teste = () => {
         // _getTemplates();
-        _createTemplate("", {
-            "name": "string",
-        });
+        // _createTemplate("Você é um vendedor de roupas masculinas! Venda!!!", {
+        //     "name": "string",
+        // });
+        // const template_id = getSessionKey(Keys.template_id)
+        // if (template_id)_createConversation({
+        //     "name": "Allyson"
+        // }, template_id );
+        const conversation_id = getSessionKey(Keys.conversation_id)
+        if (conversation_id) _interactionConversation(conversation_id, "Olá, boa tarde!")
     }
 
     return (
         <div>
             <div>
                 {messages.map((msg, index) => (
-                    <p key={index} style={{ whiteSpace: 'pre-line' }}>{msg.message}</p>
+                    <p key={index} style={{ whiteSpace: 'pre-line' }}>
+                        {msg.from}: {msg.message}
+                    </p>
                 ))}
             </div>
             <div>
